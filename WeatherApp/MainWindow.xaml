@@ -20,6 +20,7 @@
                 </MenuItem>
                 <MenuItem x:Name="SettingMenuItem" Header="Setting" />
                 <MenuItem x:Name="AboutMenuItem" Header="About" />
+                <MenuItem x:Name="SearchMenuItem" Header="Search Location" Click="SearchMenuItem_Click" />
             </Menu>
         </DockPanel>
 

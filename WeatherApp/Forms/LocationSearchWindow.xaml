@@ -33,13 +33,22 @@
             Grid.Row="0" 
             Grid.Column="1" 
             Margin="15,0,0,0" 
-            x:Name="ImieTB" 
+            x:Name="CityTB" 
             VerticalAlignment="Center" 
             HorizontalAlignment="Left" 
             Width="200"
             Text=""></TextBox>
-            <Button Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" Height="25" Width="80" x:Name="SearchBTN" Content="Search" HorizontalAlignment="Left" />
+            <Button Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" Height="25" Width="80" x:Name="SearchBTN" Content="Search" HorizontalAlignment="Left" Click="SearchBTN_Click" />
             </Grid>
+        </DockPanel>
+        <DockPanel Grid.Row="1">
+            <DataGrid Name="dataGrid1" IsReadOnly="True" ItemsSource="{Binding FoundCity}" SelectionMode="Single" AutoGenerateColumns="False">
+                <DataGrid.Columns >
+                    <DataGridTextColumn Width="250" Header="City" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="70" Header="Longitude" Binding="{Binding Longitude}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="70" Header="Latitude" Binding="{Binding Latitude}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </DockPanel>
         <Button Grid.Row="2" Grid.Column="0" Margin="10,0,0,0" Height="25" Width="80" x:Name="AddBTN" Content="Add" HorizontalAlignment="Left" />
         <Button Grid.Row="2" Grid.Column="0" Margin="100,0,0,0" Height="25" Width="80" x:Name="CancelBTN" Content="Cancel" HorizontalAlignment="Left" />
