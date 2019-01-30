@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WeatherApp.Forms"
         mc:Ignorable="d"
-        Title="Location Search" Height="500" Width="800">
+        Title="Location Search" Height="283.088" Width="632.721">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -42,7 +42,7 @@
             </Grid>
         </DockPanel>
         <DockPanel Grid.Row="1">
-            <DataGrid Name="dataGrid1" IsReadOnly="True" ItemsSource="{Binding FoundCity}" SelectionMode="Single" AutoGenerateColumns="False">
+            <DataGrid Name="dataGrid1" IsReadOnly="True" ItemsSource="{Binding dataGridItems}" SelectionMode="Single" AutoGenerateColumns="False">
                 <DataGrid.Columns >
                     <DataGridTextColumn Width="250" Header="City" Binding="{Binding Name}"></DataGridTextColumn>
                     <DataGridTextColumn Width="70" Header="Longitude" Binding="{Binding Longitude}"></DataGridTextColumn>
@@ -50,7 +50,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <Button Grid.Row="2" Grid.Column="0" Margin="10,0,0,0" Height="25" Width="80" x:Name="AddBTN" Content="Add" HorizontalAlignment="Left" />
+        <Button Grid.Row="2" Grid.Column="0" Margin="10,0,0,0" Height="25" Width="80" x:Name="AddBTN" Content="Add" HorizontalAlignment="Left" Click="AddBTN_Click" />
         <Button Grid.Row="2" Grid.Column="0" Margin="100,0,0,0" Height="25" Width="80" x:Name="CancelBTN" Content="Cancel" HorizontalAlignment="Left" />
 
     </Grid>

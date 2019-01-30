@@ -25,7 +25,8 @@ namespace WeatherApp.Forms
     public partial class LocationSearchWindow : Window
     {
         MainWindow mwInstance = (MainWindow)Application.Current.MainWindow;
-        private ObservableCollection<Location> locationsList;
+        private ObservableCollection<Location> dataGridItems = new ObservableCollection<Location>();
+        private ObservableCollection<Location> locationsList = new ObservableCollection<Location>();
 
         public ObservableCollection<Location> LocationsList
         {
@@ -43,25 +44,32 @@ namespace WeatherApp.Forms
         public LocationSearchWindow()
         {
             InitializeComponent();
+            this.DataContext = dataGridItems;
+            this.dataGrid1.ItemsSource = dataGridItems;
         }
 
         private void SearchBTN_Click(object sender, RoutedEventArgs e)
         {
-            Location foundCity = null;
+            //Location foundCity = null;
             Dictionary<string, string> outputDict = FindCity(CityTB.Text);
 
             if (outputDict.ContainsKey("found"))
             {
                 if (outputDict["found"] == "true")
                 {
-                    foundCity = new Location(outputDict["name"], outputDict["id"], outputDict["lon"], outputDict["lat"]);
-                    //this.locationsList.Add(foundCity);
-                    //mwInstance.LocationsList = this.LocationsList;
-                }
-
-                
+                    dataGridItems.Clear();
+                    dataGridItems.Add(new Location(outputDict["name"], outputDict["id"], outputDict["lon"], outputDict["lat"]));
+                    UpdateDataGrid();
+                }                
             }
 
+        }
+
+        //update dataGrid
+        private void UpdateDataGrid()
+        {
+            this.dataGrid1.ItemsSource = null;
+            this.dataGrid1.ItemsSource = dataGridItems;
         }
 
         private Dictionary<string, string> FindCity(string city)
@@ -101,9 +109,16 @@ namespace WeatherApp.Forms
                 return outputDict;
             }
 
+        }
 
-
-
-}
+        private void AddBTN_Click(object sender, RoutedEventArgs e)
+        {
+            Location selectedItem = (Location)dataGrid1.SelectedItem;
+            this.locationsList.Add(selectedItem);
+            mwInstance.LocationsList = this.LocationsList;
+            MessageBoxButton buttons = MessageBoxButton.OK;
+            MessageBoxResult result = MessageBox.Show("Location : " + selectedItem.Name + " has been added.", "New Location", buttons);
+            this.Close();
+        }
     }
 }
