@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WeatherApp.Classes;
 
 namespace WeatherApp.Forms
 {
@@ -19,9 +20,62 @@ namespace WeatherApp.Forms
     /// </summary>
     public partial class SettingWindow : Window
     {
-        public SettingWindow()
+        MainWindow mwInstance = (MainWindow)Application.Current.MainWindow;
+        private Setting setting;
+
+        public Setting Setting
+        {
+            get
+            {
+                if (this.setting == null)
+                {
+                    this.setting = new Setting(true, "", 8080);
+                }
+                return this.setting;
+            }
+
+            set
+            { this.setting = value; }
+        }
+
+        public SettingWindow(Setting setting)
         {
             InitializeComponent();
+            Setting = setting;
+            //read proxy setting
+            if (Setting.UseDefaultProxy)
+            {
+                ProxyDefaultRB.IsChecked = true;
+            }
+            else
+            {
+                ProxyCustomRB.IsChecked = true;
+                ProxyUrlTB.Text = Setting.ProxyURL;
+                ProxyNUD.Value = Setting.ProxyPort;
+            }
+        }
+
+        private void OkBTN_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProxyDefaultRB.IsChecked == true)
+            {
+                Setting.UseDefaultProxy = true;
+            }
+
+            if (ProxyCustomRB.IsChecked == true)
+            {
+                Setting.UseDefaultProxy = false;
+                Setting.ProxyURL = ProxyUrlTB.Text;
+                Setting.ProxyPort = (int)ProxyNUD.Value;
+            }
+
+            mwInstance.Setting = this.Setting;
+            this.Close();
+        }
+
+        private void CancelBTN_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

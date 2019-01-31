@@ -92,13 +92,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\Globals.cs" />
     <Compile Include="Classes\Location.cs" />
+    <Compile Include="Classes\Setting.cs" />
     <Compile Include="Forms\LocationSearchWindow.xaml.cs">
       <DependentUpon>LocationSearchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\ILocation.cs" />
+    <Compile Include="Interfaces\ISetting.cs" />
     <Compile Include="JSON Classes\Clouds.cs" />
     <Compile Include="JSON Classes\Coord.cs" />
     <Compile Include="JSON Classes\Main.cs" />

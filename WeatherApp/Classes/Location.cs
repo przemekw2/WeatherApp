@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeatherApp.Interfaces;
 
 namespace WeatherApp.Classes
 {
-    public class Location
+    public class Location : ILocation
     {
 
         public string Name { get; set; }
