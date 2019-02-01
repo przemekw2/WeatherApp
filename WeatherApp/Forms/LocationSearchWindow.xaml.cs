@@ -25,6 +25,24 @@ namespace WeatherApp.Forms
     public partial class LocationSearchWindow : Window
     {
         MainWindow mwInstance = (MainWindow)Application.Current.MainWindow;
+
+        private Setting setting;
+
+        public Setting Setting
+        {
+            get
+            {
+                if (this.setting == null)
+                {
+                    this.setting = new Setting(true, "", 8080);
+                }
+                return this.setting;
+            }
+
+            set
+            { this.setting = value; }
+        }
+
         private ObservableCollection<Location> dataGridItems = new ObservableCollection<Location>();
         private ObservableCollection<Location> locationsList = new ObservableCollection<Location>();
 
@@ -41,9 +59,10 @@ namespace WeatherApp.Forms
             set { this.locationsList = value; }
         }
 
-        public LocationSearchWindow()
+        public LocationSearchWindow(Setting setting)
         {
             InitializeComponent();
+            Setting = setting;
             this.DataContext = dataGridItems;
             this.dataGrid1.ItemsSource = dataGridItems;
         }
@@ -78,11 +97,27 @@ namespace WeatherApp.Forms
             string URL = @"http://api.openweathermap.org/data/2.5/weather?q=" + city.Trim() + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
             string json = String.Empty;
 
-            WebRequest request = WebRequest.Create(URL);
-            request.Credentials = CredentialCache.DefaultCredentials;
+            //HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(URL);
+            HttpWebRequest request = WebRequest.Create(URL) as HttpWebRequest;
+            request.UserAgent = "Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)";
+
+            if (!Setting.UseDefaultProxy)
+            {
+                WebProxy proxy = new WebProxy(Setting.ProxyURL, Setting.ProxyPort);
+                request.Proxy = proxy;
+            }
+            else
+            {
+                IWebProxy proxy = WebRequest.GetSystemWebProxy();
+                request.Proxy = proxy;
+            }
+
+            if (request.Proxy != null)
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
             try
             {
-                using (WebResponse response = request.GetResponse())
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     using (Stream responseStream = response.GetResponseStream())
                     {

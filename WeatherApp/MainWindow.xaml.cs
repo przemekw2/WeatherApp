@@ -81,14 +81,13 @@ namespace WeatherApp
 
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            LocationSearchWindow locationSearchWindow = new LocationSearchWindow();
+            LocationSearchWindow locationSearchWindow = new LocationSearchWindow(Setting);
             locationSearchWindow.ShowDialog();
         }
 
         private void SettingMenuItem_Click(object sender, RoutedEventArgs e)
         {
             SettingWindow settingWindow = new SettingWindow(Setting);
-            //settingWindow.Setting = Setting;
             settingWindow.ShowDialog();
         }
 
