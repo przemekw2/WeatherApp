@@ -10,7 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30" />
+            <!--<RowDefinition Height="30" />-->
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0">
@@ -32,13 +32,22 @@
                     <ColumnDefinition Width="80*" />
                 </Grid.ColumnDefinitions>
 
-                <ListBox x:Name="LocationsLB" Grid.Row="1" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="LocationsLB" Grid.Row="1" HorizontalContentAlignment="Stretch" SelectionChanged="LocationsLB_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+
+                <TabControl Grid.Column="1">
+                    <TabItem Header="Current Weather">
+                        <Label Content="Content goes here..." />
+                    </TabItem>
+                    <TabItem Header="5 Day Forecast" />
+                    <TabItem Header="16  Day Forecast" />
+                    <TabItem Header="Air Pollution" />
+                </TabControl>
 
             </Grid>
             

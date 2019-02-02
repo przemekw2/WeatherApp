@@ -25,6 +25,7 @@ using WeatherApp.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.Classes;
+using System.Net;
 
 namespace WeatherApp
 {
@@ -77,7 +78,9 @@ namespace WeatherApp
             InitializeComponent();
             //read setting file
             this.Setting = (Setting)DeserializeObject(applicationDirPath + settingFileName);
-            //LocationsLB.ItemsSource = locationsList;
+            //read data file
+            this.LocationsList = (ObservableCollection<Location>)DeserializeObject(applicationDirPath + dataFileName);
+            //bind ListBox itemsource
             LocationsLB.ItemsSource = LocationsList;
         }
 
@@ -90,6 +93,7 @@ namespace WeatherApp
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LocationSearchWindow locationSearchWindow = new LocationSearchWindow(Setting);
+            locationSearchWindow.LocationsList = LocationsList;
             locationSearchWindow.ShowDialog();
             this.UpdateListBox();
         }
@@ -139,6 +143,69 @@ namespace WeatherApp
         private void Weather_App_Closed(object sender, EventArgs e)
         {
             SerializeObject(Setting, applicationDirPath + settingFileName);
+            SerializeObject(LocationsList, applicationDirPath + dataFileName);
+        }
+
+        private void LocationsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.LocationsLB.SelectedItem != null)
+            {
+                Dictionary<string, string> CurrentWeather = GetCurrentWeatherData((this.LocationsLB.SelectedItem as Location).Id); 
+            }
+        }
+
+        private Dictionary<string, string> GetCurrentWeatherData(string ID)
+        {
+            Dictionary<string, string> outputDict = new Dictionary<string, string>();
+            string URL = @"http://api.openweathermap.org/data/2.5/weather?id=" + ID + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
+            string json = String.Empty;
+
+            HttpWebRequest request = WebRequest.Create(URL) as HttpWebRequest;
+            request.UserAgent = "Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)";
+
+            if (!Setting.UseDefaultProxy)
+            {
+                WebProxy proxy = new WebProxy(Setting.ProxyURL, Setting.ProxyPort);
+                request.Proxy = proxy;
+            }
+            else
+            {
+                IWebProxy proxy = WebRequest.GetSystemWebProxy();
+                request.Proxy = proxy;
+            }
+
+            if (request.Proxy != null)
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
+            try
+            {
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        var encoding = ASCIIEncoding.ASCII;
+                        using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+                        {
+                            string responseText = reader.ReadToEnd();
+                            WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
+                            outputDict.Add("found", "true");
+                            outputDict.Add("name", rootObject.name.ToString());
+                            outputDict.Add("id", rootObject.id.ToString());
+                            outputDict.Add("lat", rootObject.coord.lat.ToString());
+                            outputDict.Add("lon", rootObject.coord.lon.ToString());
+                            return outputDict;
+                        }
+
+                    }
+                }
+            }
+            catch (System.Net.WebException ex)
+            {
+                outputDict.Add("found", "false");
+                outputDict.Add("error description", ex.Message);
+                return outputDict;
+            }
+
         }
     }
 }

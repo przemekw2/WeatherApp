@@ -7,6 +7,7 @@ using WeatherApp.Interfaces;
 
 namespace WeatherApp.Classes
 {
+    [Serializable()]
     public class Location : ILocation
     {
 
