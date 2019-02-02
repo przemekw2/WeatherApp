@@ -77,12 +77,21 @@ namespace WeatherApp
             InitializeComponent();
             //read setting file
             this.Setting = (Setting)DeserializeObject(applicationDirPath + settingFileName);
+            //LocationsLB.ItemsSource = locationsList;
+            LocationsLB.ItemsSource = LocationsList;
+        }
+
+        private void UpdateListBox()
+        {
+            this.LocationsLB.ItemsSource = null;
+            this.LocationsLB.ItemsSource = LocationsList;
         }
 
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LocationSearchWindow locationSearchWindow = new LocationSearchWindow(Setting);
             locationSearchWindow.ShowDialog();
+            this.UpdateListBox();
         }
 
         private void SettingMenuItem_Click(object sender, RoutedEventArgs e)

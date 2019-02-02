@@ -23,6 +23,26 @@
                 <MenuItem x:Name="SearchMenuItem" Header="Search Location" Click="SearchMenuItem_Click" />
             </Menu>
         </DockPanel>
+        <DockPanel Grid.Row="1">
+
+            <Grid>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="80*" />
+                </Grid.ColumnDefinitions>
+
+                <ListBox x:Name="LocationsLB" Grid.Row="1" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </Grid>
+            
+        </DockPanel>
 
     </Grid>
 </Window>
