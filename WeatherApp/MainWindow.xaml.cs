@@ -188,6 +188,7 @@ namespace WeatherApp
                         {
                             string responseText = reader.ReadToEnd();
                             WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
+                            //WeatherApp.JSON_Classes.Clouds = 
                             outputDict.Add("found", "true");
                             outputDict.Add("name", rootObject.name.ToString());
                             outputDict.Add("id", rootObject.id.ToString());
