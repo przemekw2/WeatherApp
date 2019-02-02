@@ -156,6 +156,7 @@ namespace WeatherApp
 
         private Dictionary<string, string> GetCurrentWeatherData(string ID)
         {
+
             Dictionary<string, string> outputDict = new Dictionary<string, string>();
             string URL = @"http://api.openweathermap.org/data/2.5/weather?id=" + ID + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
             string json = String.Empty;
@@ -188,12 +189,29 @@ namespace WeatherApp
                         {
                             string responseText = reader.ReadToEnd();
                             WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
-                            //WeatherApp.JSON_Classes.Clouds = 
                             outputDict.Add("found", "true");
-                            outputDict.Add("name", rootObject.name.ToString());
-                            outputDict.Add("id", rootObject.id.ToString());
-                            outputDict.Add("lat", rootObject.coord.lat.ToString());
-                            outputDict.Add("lon", rootObject.coord.lon.ToString());
+
+                            #region Main
+                            outputDict.Add("temp", rootObject.main.temp.ToString());
+                            outputDict.Add("pressure", rootObject.main.temp.ToString());
+                            outputDict.Add("humidity", rootObject.main.humidity.ToString());
+                            outputDict.Add("temp_min", rootObject.main.temp_min.ToString());
+                            outputDict.Add("temp_max", rootObject.main.temp_max.ToString());
+                            #endregion
+
+                            #region Wind
+                            outputDict.Add("speed", rootObject.wind.speed.ToString());
+                            outputDict.Add("deg", rootObject.wind.deg.ToString());
+                            #endregion
+
+                            #region Weather
+                            foreach (var item in rootObject.weather)
+                            {
+                                outputDict.Add("main", item.main.ToString());
+                                outputDict.Add("description", item.description.ToString());
+                            }
+                            #endregion
+                            
                             return outputDict;
                         }
 

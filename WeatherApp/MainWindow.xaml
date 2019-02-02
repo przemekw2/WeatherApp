@@ -44,9 +44,7 @@
                     <TabItem Header="Current Weather">
                         <Label Content="Content goes here..." />
                     </TabItem>
-                    <TabItem Header="5 Day Forecast" />
-                    <TabItem Header="16  Day Forecast" />
-                    <TabItem Header="Air Pollution" />
+                    <TabItem Header="5 Day / 3 Hour Forecast" />
                 </TabControl>
 
             </Grid>
