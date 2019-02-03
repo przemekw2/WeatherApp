@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="Classes\Location.cs" />
     <Compile Include="Classes\Setting.cs" />
+    <Compile Include="Classes\WConditions.cs" />
     <Compile Include="Forms\LocationSearchWindow.xaml.cs">
       <DependentUpon>LocationSearchWindow.xaml</DependentUpon>
     </Compile>
@@ -102,14 +103,26 @@
     </Compile>
     <Compile Include="Interfaces\ILocation.cs" />
     <Compile Include="Interfaces\ISetting.cs" />
-    <Compile Include="JSON Classes\Clouds.cs" />
-    <Compile Include="JSON Classes\Coord.cs" />
-    <Compile Include="JSON Classes\Main.cs" />
-    <Compile Include="JSON Classes\RootObject.cs" />
-    <Compile Include="JSON Classes\RootObjectList.cs" />
-    <Compile Include="JSON Classes\Sys.cs" />
-    <Compile Include="JSON Classes\Weather.cs" />
-    <Compile Include="JSON Classes\Wind.cs" />
+    <Compile Include="Interfaces\IWConditions.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Clouds.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Coord.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Main.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\RootObject.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\RootObjectList.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Sys.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Weather.cs" />
+    <Compile Include="JSON_Classes_Current_Weather\Wind.cs" />
+    <Compile Include="JSON_Classes_Five_Day\City.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Clouds.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Coord.cs" />
+    <Compile Include="JSON_Classes_Five_Day\List.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Main.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Rain.cs" />
+    <Compile Include="JSON_Classes_Five_Day\RootObject.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Snow.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Sys.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Weather.cs" />
+    <Compile Include="JSON_Classes_Five_Day\Wind.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

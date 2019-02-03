@@ -42,7 +42,7 @@
 
                 <TabControl Grid.Column="1">
                     <TabItem Header="Current Weather">
-                        <Label Content="Content goes here..." />
+
                     </TabItem>
                     <TabItem Header="5 Day / 3 Hour Forecast" />
                 </TabControl>

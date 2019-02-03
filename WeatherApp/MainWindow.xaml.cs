@@ -25,7 +25,6 @@ using WeatherApp.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.Classes;
-using System.Net;
 
 namespace WeatherApp
 {
@@ -150,7 +149,8 @@ namespace WeatherApp
         {
             if (this.LocationsLB.SelectedItem != null)
             {
-                Dictionary<string, string> CurrentWeather = GetCurrentWeatherData((this.LocationsLB.SelectedItem as Location).Id); 
+                Dictionary<string, string> CurrentWeatherdict = GetCurrentWeatherData((this.LocationsLB.SelectedItem as Location).Id); 
+                Dictionary<string, WConditions> FiveDayWeatherDict = GetFiveDayWeather((this.LocationsLB.SelectedItem as Location).Id);
             }
         }
 
@@ -205,11 +205,11 @@ namespace WeatherApp
                             #endregion
 
                             #region Weather
-                            foreach (var item in rootObject.weather)
-                            {
-                                outputDict.Add("main", item.main.ToString());
-                                outputDict.Add("description", item.description.ToString());
-                            }
+                            //foreach (var item in rootObject.weather)
+                            //{
+                            //    outputDict.Add("main", item.main.ToString());
+                            //    outputDict.Add("description", item.description.ToString());
+                            //}
                             #endregion
                             
                             return outputDict;
@@ -220,9 +220,78 @@ namespace WeatherApp
             }
             catch (System.Net.WebException ex)
             {
-                outputDict.Add("found", "false");
-                outputDict.Add("error description", ex.Message);
-                return outputDict;
+                return null;
+            }
+
+        }
+
+        private Dictionary<string, WConditions> GetFiveDayWeather(string ID)
+        {
+
+            Dictionary<string, WConditions> outputDict = new Dictionary<string, WConditions>();
+            string URL = @"http://api.openweathermap.org/data/2.5/forecast?id=" + ID + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
+            //string URL = @"http://api.openweathermap.org/data/2.5/weather?id=" + ID + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
+            string json = String.Empty;
+
+            HttpWebRequest request = WebRequest.Create(URL) as HttpWebRequest;
+            request.UserAgent = "Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)";
+
+            if (!Setting.UseDefaultProxy)
+            {
+                WebProxy proxy = new WebProxy(Setting.ProxyURL, Setting.ProxyPort);
+                request.Proxy = proxy;
+            }
+            else
+            {
+                IWebProxy proxy = WebRequest.GetSystemWebProxy();
+                request.Proxy = proxy;
+            }
+
+            if (request.Proxy != null)
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
+            try
+            {
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        var encoding = ASCIIEncoding.ASCII;
+                        using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+                        {
+                            string responseText = reader.ReadToEnd();
+                            //WeatherApp.JSON_Classes_Five_Day.List list5DayForecast = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes_Five_Day.List>(responseText);
+                            WeatherApp.JSON_Classes_Five_Day.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes_Five_Day.RootObject>(responseText);
+                            for (int i = 0; i < rootObject.list.Count; i++)
+                            {
+                                outputDict.Add(rootObject.list[i].dt_txt, new WConditions(
+                                    ID,
+                                    rootObject.list[i].dt.ToString(),
+                                    rootObject.list[i].dt_txt.ToString(),
+                                    rootObject.list[i].main.temp.ToString(),
+                                    rootObject.list[i].main.temp_min.ToString(),
+                                    rootObject.list[i].main.temp_max.ToString(),
+                                    rootObject.list[i].main.pressure.ToString(),
+                                    rootObject.list[i].main.humidity.ToString(),
+                                    rootObject.list[i].weather[0].main.ToString(),
+                                    rootObject.list[i].weather[0].description.ToString(),
+                                    rootObject.list[i].clouds.all.ToString(),
+                                    rootObject.list[i].wind.speed.ToString(),
+                                    rootObject.list[i].wind.deg.ToString(),
+                                    rootObject.list[i].rain.__invalid_name__3h.ToString(),
+                                    rootObject.list[i].snow.__invalid_name__3h.ToString()
+                                    ));
+                            }
+
+                            return outputDict;
+
+                        }
+                    }
+                }
+            }
+            catch (System.Net.WebException ex)
+            {
+                return null;
             }
 
         }

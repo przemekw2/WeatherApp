@@ -15,13 +15,17 @@ namespace WeatherApp.Classes
         public string Id { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
+        public Dictionary<string, string> CurrentWeatherDict { get; set; }
+        public Dictionary<string, WConditions> FiveDayWeatherDict { get; set; }
 
-        public Location(string name, string id, string longitude, string latitude)
+        public Location(string name, string id, string longitude, string latitude, Dictionary<string, string> currentweatherdict, Dictionary<string, WConditions> fivedayweatherdict)
         {
             this.Name = name;
             this.Id = id;
             this.Longitude = longitude;
             this.Latitude = latitude;
+            this.CurrentWeatherDict = currentweatherdict;
+            this.FiveDayWeatherDict = fivedayweatherdict;
         }
 
 
