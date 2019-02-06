@@ -21,6 +21,7 @@
                 <MenuItem x:Name="SettingMenuItem" Header="Setting" Click="SettingMenuItem_Click" />
                 <MenuItem x:Name="AboutMenuItem" Header="About" />
                 <MenuItem x:Name="SearchMenuItem" Header="Search Location" Click="SearchMenuItem_Click" />
+                <MenuItem x:Name="UpdateMenuItem" Header="Update Weather Data" Click="UpdateMenuItem_Click"  />
             </Menu>
         </DockPanel>
         <DockPanel Grid.Row="1">

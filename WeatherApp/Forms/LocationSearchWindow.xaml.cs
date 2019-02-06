@@ -77,7 +77,7 @@ namespace WeatherApp.Forms
                 if (outputDict["found"] == "true")
                 {
                     dataGridItems.Clear();
-                    dataGridItems.Add(new Location(outputDict["name"], outputDict["id"], outputDict["lon"], outputDict["lat"]));
+                    dataGridItems.Add(new Location(outputDict["name"], outputDict["id"], outputDict["lon"], outputDict["lat"], null , null));
                     UpdateDataGrid();
                 }                
             }
