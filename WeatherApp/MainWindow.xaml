@@ -41,11 +41,61 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <TabControl Grid.Column="1">
+                <TabControl x:Name="TabControl1" Grid.Column="1">
                     <TabItem Header="Current Weather">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
+                            <Label Grid.Row="0" Grid.Column="1" Content="Temperature" />
+                            <Label Grid.Row="0" Grid.Column="2" x:Name="TemperatureLB" Content="{Binding Temperature}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="Temperature (min)"/>
+                            <Label Grid.Row="1" Grid.Column="2" x:Name="TemperatureminLB" Content="{Binding Temperaturemin}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="Temperature (max)"/>
+                            <Label Grid.Row="2" Grid.Column="2" x:Name="TemperaturemaxLB" Content="{Binding Temperaturemax}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="Pressure"/>
+                            <Label Grid.Row="3" Grid.Column="2" x:Name="PressureLB" Content="{Binding Pressure}"/>
+                            <Label Grid.Row="4" Grid.Column="1" Content="Humidity"/>
+                            <Label Grid.Row="4" Grid.Column="2" x:Name="HumidityLB" Content="{Binding Humidity}"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="Conditions:"/>
+                            <Label Grid.Row="6" Grid.Column="1" x:Name="MainLB" Content="{Binding Main}"/>
+                            <Label Grid.Row="7" Grid.Column="1" x:Name="DescriptionLB" Content="{Binding Description}"/>
+                            <Label Grid.Row="8" Grid.Column="1" Content="Wind"/>
+                            <Label Grid.Row="9" Grid.Column="1" x:Name="SpeedLB" Content="{Binding Speed}"/>
+                            <Label Grid.Row="10" Grid.Column="1" x:Name="DegreeLB" Content="{Binding Degree}"/>
+
+                        </Grid>
                     </TabItem>
-                    <TabItem Header="5 Day / 3 Hour Forecast" />
+                    <TabItem Header="5 Day / 3 Hour Forecast" >
+                        <TreeView>
+                            <TreeViewItem Header="Level 1" IsExpanded="True">
+                                <TreeViewItem Header="Level 2.1" />
+                                <TreeViewItem Header="Level 2.2" IsExpanded="True">
+                                    <TreeViewItem Header="Level 3.1" />
+                                    <TreeViewItem Header="Level 3.2" />
+                                </TreeViewItem>
+                                <TreeViewItem Header="Level 2.3" />
+                            </TreeViewItem>
+                        </TreeView>
+                    </TabItem>
                 </TabControl>
 
             </Grid>

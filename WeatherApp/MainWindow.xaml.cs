@@ -33,6 +33,7 @@ namespace WeatherApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Location tempLocation = null;
 
         private string applicationDirPath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
             + System.IO.Path.DirectorySeparatorChar;
@@ -147,11 +148,31 @@ namespace WeatherApp
 
         private void LocationsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (this.LocationsLB.SelectedItem != null)
-            //{
-            //    Dictionary<string, string> CurrentWeatherdict = GetCurrentWeatherData((this.LocationsLB.SelectedItem as Location).Id); 
-            //    Dictionary<string, WConditions> FiveDayWeatherDict = GetFiveDayWeather((this.LocationsLB.SelectedItem as Location).Id);
-            //}
+            if (this.LocationsLB.SelectedItem != null)
+            {
+                tempLocation = this.LocationsLB.SelectedItem as Location;
+                CurrentWeather cweather = new CurrentWeather
+                    (
+                        tempLocation.CurrentWeatherDict["temp"],
+                        tempLocation.CurrentWeatherDict["temp_min"],
+                        tempLocation.CurrentWeatherDict["temp_max"],
+                        tempLocation.CurrentWeatherDict["pressure"],
+                        tempLocation.CurrentWeatherDict["humidity"],
+                        tempLocation.CurrentWeatherDict["main"],
+                        tempLocation.CurrentWeatherDict["description"],
+                        tempLocation.CurrentWeatherDict["speed"],
+                        tempLocation.CurrentWeatherDict["deg"]
+                    );
+                TemperatureLB.DataContext = cweather;
+                TemperatureminLB.DataContext = cweather;
+                TemperaturemaxLB.DataContext = cweather;
+                PressureLB.DataContext = cweather;
+                HumidityLB.DataContext = cweather;
+                MainLB.DataContext = cweather;
+                DescriptionLB.DataContext = cweather;
+                SpeedLB.DataContext = cweather;
+                DegreeLB.DataContext = cweather;
+            }
         }
 
         private void UpdateWeatherData()
@@ -341,5 +362,11 @@ namespace WeatherApp
         {
             UpdateWeatherData();
         }
+    }
+
+    public class MyTabItem
+    {
+        public string Header { get; set; }
+        public string Content { get; set; }
     }
 }
