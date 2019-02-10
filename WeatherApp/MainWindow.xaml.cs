@@ -148,8 +148,11 @@ namespace WeatherApp
 
         private void LocationsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             if (this.LocationsLB.SelectedItem != null)
             {
+
+                //binding for current weather
                 tempLocation = this.LocationsLB.SelectedItem as Location;
                 CurrentWeather cweather = new CurrentWeather
                     (
@@ -172,16 +175,260 @@ namespace WeatherApp
                 DescriptionLB.DataContext = cweather;
                 SpeedLB.DataContext = cweather;
                 DegreeLB.DataContext = cweather;
+
+                //binding dla 5 day weather
+                treeView.Items.Clear();
+                foreach (KeyValuePair<string, WConditions> wcondition in tempLocation.FiveDayWeatherDict)
+                {
+                    TreeViewItem treeItem = null;
+                    treeItem = new TreeViewItem();
+                    treeItem.Header = wcondition.Key;
+                        Grid DynamicGrid = new Grid();
+                       // DynamicGrid.ShowGridLines = true;
+                        ColumnDefinition gridCol1 = new ColumnDefinition();
+                        ColumnDefinition gridCol2 = new ColumnDefinition();
+                        DynamicGrid.ColumnDefinitions.Add(gridCol1);
+                        DynamicGrid.ColumnDefinitions.Add(gridCol2);
+                        RowDefinition gridRow1 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow1);
+                        RowDefinition gridRow2 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow2);
+                        RowDefinition gridRow3 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow3);
+                        RowDefinition gridRow4 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow4);
+                        RowDefinition gridRow5 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow5);
+                        RowDefinition gridRow6 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow6);
+                        RowDefinition gridRow7 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow7);
+                        RowDefinition gridRow8 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow8);
+                        RowDefinition gridRow9 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow9);
+                        RowDefinition gridRow10 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow10);
+                        RowDefinition gridRow11 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow11);
+                        RowDefinition gridRow12 = new RowDefinition();
+                        DynamicGrid.RowDefinitions.Add(gridRow12);
+                        
+                        //Temperature
+                        TextBlock txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Temperature";
+                        Grid.SetRow(txtBlock1, 0);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        TextBlock txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Temp.ToString();
+                        Thickness margin = txtBlock1_1.Margin;
+                        margin.Left = 30;
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 0);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Temperature Min
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Temperature (min)";
+                        Grid.SetRow(txtBlock1, 1);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.TempMin.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 1);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Temperature Max
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Temperature (max)";
+                        Grid.SetRow(txtBlock1, 2);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.TempMax.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 2);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Pressure
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Pressure";
+                        Grid.SetRow(txtBlock1, 3);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Pressure.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 3);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Humidity
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Humidity";
+                        Grid.SetRow(txtBlock1, 4);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Humidity.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 4);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Conditions
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Conditions";
+                        Grid.SetRow(txtBlock1, 5);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Conditions.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 5);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Conditions Details
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Conditions details";
+                        Grid.SetRow(txtBlock1, 6);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.ConditionsDesc.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 6);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Wind Speed
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Wind Speed";
+                        Grid.SetRow(txtBlock1, 7);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.WindSpeed.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 7);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Wind Degree
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Wind Degree";
+                        Grid.SetRow(txtBlock1, 8);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.WindDeg.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 8);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Clouds
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Clouds";
+                        Grid.SetRow(txtBlock1, 9);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Cloud.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 9);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Rain
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Rain";
+                        Grid.SetRow(txtBlock1, 10);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Rain.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 10);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                        //Snow
+                        txtBlock1 = null;
+                        txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Snow";
+                        Grid.SetRow(txtBlock1, 11);
+                        Grid.SetColumn(txtBlock1, 0);
+                        DynamicGrid.Children.Add(txtBlock1);
+
+                        txtBlock1_1 = null;
+                        txtBlock1_1 = new TextBlock();
+                        txtBlock1_1.Text = wcondition.Value.Snow.ToString();
+                        txtBlock1_1.Margin = margin;
+                        Grid.SetRow(txtBlock1_1, 11);
+                        Grid.SetColumn(txtBlock1_1, 1);
+                        DynamicGrid.Children.Add(txtBlock1_1);
+
+                    treeItem.Items.Add(new TreeViewItem() { Header = DynamicGrid });
+                    treeView.Items.Add(treeItem);
+                }
+
+
             }
         }
 
         private void UpdateWeatherData()
         {
+            //update forecast data
             foreach(Location location in locationsList)
             {
                 location.CurrentWeatherDict = GetCurrentWeatherData(location.Id);
                 location.FiveDayWeatherDict = GetFiveDayWeather(location.Id);
             }
+
+            //update form controls
+        }
+
+        private void UpdateFormControls(Location location)
+        {
+
         }
 
         private Dictionary<string, string> GetCurrentWeatherData(string ID)

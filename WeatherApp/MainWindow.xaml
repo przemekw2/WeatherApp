@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WeatherApp"
+        xmlns:localClasses="clr-namespace:WeatherApp.Classes"
         mc:Ignorable="d"
         Title="Weather App" Height="450" Width="800" Closed="Weather_App_Closed">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -85,16 +87,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="5 Day / 3 Hour Forecast" >
-                        <TreeView>
-                            <TreeViewItem Header="Level 1" IsExpanded="True">
-                                <TreeViewItem Header="Level 2.1" />
-                                <TreeViewItem Header="Level 2.2" IsExpanded="True">
-                                    <TreeViewItem Header="Level 3.1" />
-                                    <TreeViewItem Header="Level 3.2" />
-                                </TreeViewItem>
-                                <TreeViewItem Header="Level 2.3" />
-                            </TreeViewItem>
-                        </TreeView>
+                        <TreeView x:Name="treeView" />
                     </TabItem>
                 </TabControl>
 
