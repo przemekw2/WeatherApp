@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
-            <!--<RowDefinition Height="30" />-->
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0">
@@ -94,6 +94,8 @@
             </Grid>
             
         </DockPanel>
-
+        <StatusBar Grid.Row="2">
+            <Label x:Name="StatusLB" Content=""/>
+        </StatusBar>
     </Grid>
 </Window>

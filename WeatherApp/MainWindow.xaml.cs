@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 //using System.ServiceModel.Syndication;
 using System.Net;
+using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -25,6 +26,7 @@ using WeatherApp.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.Classes;
+using System.Windows.Threading;
 
 namespace WeatherApp
 {
@@ -37,9 +39,17 @@ namespace WeatherApp
 
         private string applicationDirPath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
             + System.IO.Path.DirectorySeparatorChar;
-        private const string settingFileName = "Setting.dat";
-        private const string dataFileName = "Data.dat";
 
+
+        #region DispatcherTimers definition
+        private DispatcherTimer dispatcherTimerUpdate = new DispatcherTimer();
+        private DispatcherTimer dispatcherTimerNetwork = new DispatcherTimer();
+        private const int dispatcherTimerNetworkVal = 30;
+        private const string URLStr = "www.google.pl";
+        #endregion
+
+        #region Setting definitions
+        private const string settingFileName = "Setting.dat";
         private Setting setting;
 
         public Setting Setting
@@ -56,7 +66,10 @@ namespace WeatherApp
             set
             { this.setting = value; }
         }
+        #endregion
 
+        #region Locations definition
+        private const string dataFileName = "Data.dat";
         private ObservableCollection<Location> locationsList;
 
         public ObservableCollection<Location> LocationsList
@@ -71,7 +84,7 @@ namespace WeatherApp
             }
             set { this.locationsList = value; }
         }
-
+        #endregion
 
         public MainWindow()
         {
@@ -82,6 +95,43 @@ namespace WeatherApp
             this.LocationsList = (ObservableCollection<Location>)DeserializeObject(applicationDirPath + dataFileName);
             //bind ListBox itemsource
             LocationsLB.ItemsSource = LocationsList;
+
+            if (NetworkConnectionStatus(URLStr))
+            {
+                StatusLB.Content = "Internet Connection OK";
+                UpdateWeatherData();
+            }
+            else { StatusLB.Content = "No Internet Connection"; }
+
+            //Set Dispatcher Timers
+            SetDispatcherTimers();
+        }
+
+        private void SetDispatcherTimers()
+        {
+            dispatcherTimerNetwork.Tick += dispatcherTimerNetwork_Tick;
+            dispatcherTimerNetwork.Interval = new TimeSpan(0, 0, dispatcherTimerNetworkVal);
+            dispatcherTimerNetwork.Start();
+            dispatcherTimerUpdate.Tick += dispatcherTimerUpdate_Tick;
+            dispatcherTimerUpdate.Interval = new TimeSpan(0, setting.UpdateInterval, 0);
+            dispatcherTimerUpdate.Start();
+        }
+
+        private void dispatcherTimerNetwork_Tick(object sender, EventArgs e)
+        {
+            if (NetworkConnectionStatus(URLStr))
+            {
+                StatusLB.Content = "Internet Connection OK";
+            }
+            else
+            {
+                StatusLB.Content = "No Internet Connection";
+            }
+        }
+
+        private void dispatcherTimerUpdate_Tick(object sender, EventArgs e)
+        {
+            UpdateWeatherData();
         }
 
         private void UpdateListBox()
@@ -616,11 +666,27 @@ namespace WeatherApp
         {
             UpdateWeatherData();
         }
+
+        private bool NetworkConnectionStatus(string urlStr)
+        {
+            try
+            {
+                Dns.GetHostEntry(urlStr);
+                return true;
+            }
+            catch (SocketException ex)
+            {
+                return false;
+            }
+        }
+
     }
 
-    public class MyTabItem
-    {
-        public string Header { get; set; }
-        public string Content { get; set; }
-    }
+    //public class MyTabItem
+    //{
+    //    public string Header { get; set; }
+    //    public string Content { get; set; }
+    //}
+
+
 }
