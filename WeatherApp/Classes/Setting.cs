@@ -13,12 +13,16 @@ namespace WeatherApp.Classes
         public bool UseDefaultProxy { get; set; }
         public string ProxyURL { get; set; }
         public int ProxyPort { get; set; }
+        public string APPID { get; set; }
+        public int UpdateInterval { get; set; }
 
-        public Setting(bool usedefaultproxy, string proxyurl, int proxyport)
+        public Setting(bool usedefaultproxy, string proxyurl, int proxyport, string appid, int updateinterval)
         {
-            UseDefaultProxy = usedefaultproxy;
-            ProxyURL = proxyurl;
-            ProxyPort = proxyport;
+            this.UseDefaultProxy = usedefaultproxy;
+            this.ProxyURL = proxyurl;
+            this.ProxyPort = proxyport;
+            this.APPID = appid;
+            this.UpdateInterval = updateinterval;
         }
 
       

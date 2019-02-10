@@ -11,5 +11,7 @@ namespace WeatherApp.Interfaces
         bool UseDefaultProxy { get; set; }
         string ProxyURL { get; set; }
         int ProxyPort { get; set; }
+        string APPID { get; set; }
+        int UpdateInterval { get; set; }
     }
 }

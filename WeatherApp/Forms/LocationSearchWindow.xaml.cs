@@ -34,7 +34,7 @@ namespace WeatherApp.Forms
             {
                 if (this.setting == null)
                 {
-                    this.setting = new Setting(true, "", 8080);
+                    this.setting = new Setting(true, "", 8080, "", 0);
                 }
                 return this.setting;
             }
@@ -94,7 +94,7 @@ namespace WeatherApp.Forms
         private Dictionary<string, string> FindCity(string city)
         {
             Dictionary<string, string> outputDict = new Dictionary<string, string>();
-            string URL = @"http://api.openweathermap.org/data/2.5/weather?q=" + city.Trim() + @"&APPID=53849b8462e783dd24f9bdfb43563129&units=metric";
+            string URL = @"http://api.openweathermap.org/data/2.5/weather?q=" + city.Trim() + @"&APPID=" + Setting.APPID + "&units=metric";
             string json = String.Empty;
 
             //HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(URL);

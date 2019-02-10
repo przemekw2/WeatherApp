@@ -29,7 +29,7 @@ namespace WeatherApp.Forms
             {
                 if (this.setting == null)
                 {
-                    this.setting = new Setting(true, "", 8080);
+                    this.setting = new Setting(true, "", 8080, "", 0);
                 }
                 return this.setting;
             }
@@ -53,10 +53,15 @@ namespace WeatherApp.Forms
                 ProxyUrlTB.Text = Setting.ProxyURL;
                 ProxyNUD.Value = Setting.ProxyPort;
             }
+
+            //read miscellaneous setting
+            APIKEYTB.Text = Setting.APPID;
+            IntervalNUD.Value = Setting.UpdateInterval;
         }
 
         private void OkBTN_Click(object sender, RoutedEventArgs e)
         {
+            //save proxy setting
             if (ProxyDefaultRB.IsChecked == true)
             {
                 Setting.UseDefaultProxy = true;
@@ -68,6 +73,10 @@ namespace WeatherApp.Forms
                 Setting.ProxyURL = ProxyUrlTB.Text;
                 Setting.ProxyPort = (int)ProxyNUD.Value;
             }
+
+            //save miscellaneous setting
+            Setting.APPID = APIKEYTB.Text;
+            Setting.UpdateInterval = (int)IntervalNUD.Value;
 
             mwInstance.Setting = this.Setting;
             this.Close();
