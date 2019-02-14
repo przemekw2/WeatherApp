@@ -27,6 +27,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.Classes;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace WeatherApp
 {
@@ -36,6 +37,7 @@ namespace WeatherApp
     public partial class MainWindow : Window
     {
         private Location tempLocation = null;
+        private TrayIcon trayIcon;
 
         private string applicationDirPath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
             + System.IO.Path.DirectorySeparatorChar;
@@ -89,6 +91,11 @@ namespace WeatherApp
         public MainWindow()
         {
             InitializeComponent();
+            //tray icon
+            trayIcon = new TrayIcon(this);
+
+            Closing += OnClosingWindow;
+
             //read setting file
             this.Setting = (Setting)DeserializeObject(applicationDirPath + settingFileName);
             //read data file
@@ -105,6 +112,29 @@ namespace WeatherApp
 
             //Set Dispatcher Timers
             SetDispatcherTimers();
+        }
+
+        #region Tray Icon
+        //public void ShowTrayInformation(string Title, string Content)
+        //{
+        //    ni.BalloonTipTitle = Title;
+        //    ni.BalloonTipText = Content;
+        //    ni.BalloonTipIcon = ToolTipIcon.None;
+        //    ni.Visible = true;
+        //    ni.ShowBalloonTip(30000);
+
+        //    ni.BalloonTipClicked += delegate (object sender, EventArgs args)
+        //    {
+        //        mainWindow.Show();
+        //        mainWindow.Activate();
+        //    };
+        //}
+        #endregion Tray Icon
+
+        private void OnClosingWindow(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
 
         private void SetDispatcherTimers()

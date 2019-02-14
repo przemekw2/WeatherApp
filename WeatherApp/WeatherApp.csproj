@@ -39,7 +39,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -95,6 +97,7 @@
     <Compile Include="Classes\CurrentWeather.cs" />
     <Compile Include="Classes\Location.cs" />
     <Compile Include="Classes\Setting.cs" />
+    <Compile Include="Classes\TrayIcon.cs" />
     <Compile Include="Classes\WConditions.cs" />
     <Compile Include="Forms\LocationSearchWindow.xaml.cs">
       <DependentUpon>LocationSearchWindow.xaml</DependentUpon>
@@ -156,6 +159,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\Sun.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
