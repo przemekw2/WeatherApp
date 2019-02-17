@@ -162,5 +162,12 @@
   <ItemGroup>
     <Resource Include="Icons\Sun.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\arrow_refresh.png" />
+    <Resource Include="Icons\cog.png" />
+    <Resource Include="Icons\door_in.png" />
+    <Resource Include="Icons\map_add.png" />
+    <Resource Include="Icons\map_delete.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

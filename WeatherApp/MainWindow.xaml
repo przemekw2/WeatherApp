@@ -22,9 +22,58 @@
                 </MenuItem>
                 <MenuItem x:Name="SettingMenuItem" Header="Setting" Click="SettingMenuItem_Click" />
                 <MenuItem x:Name="AboutMenuItem" Header="About" />
-                <MenuItem x:Name="SearchMenuItem" Header="Search Location" Click="SearchMenuItem_Click" />
-                <MenuItem x:Name="UpdateMenuItem" Header="Update Weather Data" Click="UpdateMenuItem_Click"  />
+                <!--<MenuItem x:Name="SearchMenuItem" Header="Search Location" Click="SearchMenuItem_Click" />
+                <MenuItem x:Name="UpdateMenuItem" Header="Update Weather Data" Click="UpdateMenuItem_Click"  />-->
             </Menu>
+
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    
+                    <Button x:Name="addLocationBTN" Click="addLocationBTN_Click" >
+                        <StackPanel>
+                            <Image Source="Icons\map_add.png" Stretch="None" />
+                            <TextBlock>Add</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="removeLocationBTN" Click="removeLocationBTN_Click" >
+                        <StackPanel>
+                            <Image Source="Icons\map_delete.png" Stretch="None" />
+                            <TextBlock>Remove</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Separator />
+
+                    <Button x:Name="updateBTN" Click="updateBTN_Click">
+                        <StackPanel>
+                            <Image Source="Icons\arrow_refresh.png" Stretch="None" />
+                            <TextBlock>Update</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator />
+
+                    <Button x:Name="settingBTN" Click="settingBTN_Click" >
+                        <StackPanel>
+                            <Image Source="Icons\cog.png" Stretch="None" />
+                            <TextBlock>Setting</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator />
+
+                    <Button x:Name="exitBTN" Click="exitBTN_Click" >
+                        <StackPanel>
+                            <Image Source="Icons\door_in.png" Stretch="None" />
+                            <TextBlock>Close</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                </ToolBar>
+
+            </ToolBarTray>
+
         </DockPanel>
         <DockPanel Grid.Row="1">
 

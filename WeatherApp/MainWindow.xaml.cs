@@ -46,6 +46,7 @@ namespace WeatherApp
         #region DispatcherTimers definition
         private DispatcherTimer dispatcherTimerUpdate = new DispatcherTimer();
         private DispatcherTimer dispatcherTimerNetwork = new DispatcherTimer();
+        private DispatcherTimer dispatcherTimerTrayNotifications = new DispatcherTimer();
         private const int dispatcherTimerNetworkVal = 30;
         private const string URLStr = "www.google.pl";
         #endregion
@@ -60,7 +61,7 @@ namespace WeatherApp
             {
                 if (this.setting == null)
                 {
-                    this.setting = new Setting(true, "", 8080, "", 0);
+                    this.setting = new Setting(true, "", 8080, "", 0, false);
                 }
                 return this.setting;
             }
@@ -116,7 +117,7 @@ namespace WeatherApp
 
             //Set Dispatcher Timers
             SetDispatcherTimers();
-            ShowNotifications();
+            //ShowNotifications();
         }
 
         private void ShowNotifications()
@@ -165,6 +166,21 @@ namespace WeatherApp
             dispatcherTimerUpdate.Tick += dispatcherTimerUpdate_Tick;
             dispatcherTimerUpdate.Interval = new TimeSpan(0, setting.UpdateInterval, 0);
             dispatcherTimerUpdate.Start();
+            dispatcherTimerTrayNotifications.Tick += dispatcherTimerTrayNotifications_Tick;
+            dispatcherTimerTrayNotifications.Interval = new TimeSpan(0, setting.UpdateInterval, 0);
+            SetDispatcherTimerTNotifications();
+        }
+
+        private void SetDispatcherTimerTNotifications()
+        {
+            if (Setting.TrayNotification)
+            {
+                dispatcherTimerTrayNotifications.Start();
+            }
+            else
+            {
+                dispatcherTimerTrayNotifications.Stop();
+            }
         }
 
         private void dispatcherTimerNetwork_Tick(object sender, EventArgs e)
@@ -182,6 +198,11 @@ namespace WeatherApp
         private void dispatcherTimerUpdate_Tick(object sender, EventArgs e)
         {
             UpdateWeatherData();
+        }
+
+        private void dispatcherTimerTrayNotifications_Tick(object sender, EventArgs e)
+        {
+            ShowNotifications();
         }
 
         private void UpdateListBox()
@@ -204,6 +225,7 @@ namespace WeatherApp
         {
             SettingWindow settingWindow = new SettingWindow(Setting);
             settingWindow.ShowDialog();
+            SetDispatcherTimerTNotifications();
         }
 
         private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
@@ -732,6 +754,48 @@ namespace WeatherApp
             }
         }
 
+        private void addLocationBTN_Click(object sender, RoutedEventArgs e)
+        {
+            LocationSearchWindow locationSearchWindow = new LocationSearchWindow(Setting);
+            locationSearchWindow.LocationsList = LocationsList;
+            locationSearchWindow.ShowDialog();
+            this.UpdateListBox();
+        }
+
+        private void updateBTN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateWeatherData();
+        }
+
+        private void settingBTN_Click(object sender, RoutedEventArgs e)
+        {
+            SettingWindow settingWindow = new SettingWindow(Setting);
+            settingWindow.ShowDialog();
+            SetDispatcherTimerTNotifications();
+        }
+
+        private void exitBTN_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void removeLocationBTN_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.LocationsLB.SelectedItem != null)
+            {
+                Location tempLocation = this.LocationsLB.SelectedItem as Location;
+                MessageBoxResult result = MessageBox.Show("Do you want to remove location : " + tempLocation.Name + " ?",
+                          "Location remove",
+                          MessageBoxButton.YesNo,
+                          MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    locationsList.Remove(locationsList.Where(i => i.Id == tempLocation.Id).Single());
+                    UpdateListBox();
+                }
+            }
+        }
     }
 
     //public class MyTabItem

@@ -15,14 +15,16 @@ namespace WeatherApp.Classes
         public int ProxyPort { get; set; }
         public string APPID { get; set; }
         public int UpdateInterval { get; set; }
+        public bool TrayNotification { get; set; }
 
-        public Setting(bool usedefaultproxy, string proxyurl, int proxyport, string appid, int updateinterval)
+        public Setting(bool usedefaultproxy, string proxyurl, int proxyport, string appid, int updateinterval, bool traynotifications)
         {
             this.UseDefaultProxy = usedefaultproxy;
             this.ProxyURL = proxyurl;
             this.ProxyPort = proxyport;
             this.APPID = appid;
             this.UpdateInterval = updateinterval;
+            this.TrayNotification = traynotifications;
         }
 
       

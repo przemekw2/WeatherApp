@@ -34,7 +34,7 @@ namespace WeatherApp.Forms
             {
                 if (this.setting == null)
                 {
-                    this.setting = new Setting(true, "", 8080, "", 0);
+                    this.setting = new Setting(true, "", 8080, "", 0, false);
                 }
                 return this.setting;
             }

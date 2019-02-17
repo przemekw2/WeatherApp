@@ -13,5 +13,6 @@ namespace WeatherApp.Interfaces
         int ProxyPort { get; set; }
         string APPID { get; set; }
         int UpdateInterval { get; set; }
+        bool TrayNotification { get; set; }
     }
 }

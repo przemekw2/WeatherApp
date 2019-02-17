@@ -29,7 +29,7 @@ namespace WeatherApp.Forms
             {
                 if (this.setting == null)
                 {
-                    this.setting = new Setting(true, "", 8080, "", 0);
+                    this.setting = new Setting(true, "", 8080, "", 0, false);
                 }
                 return this.setting;
             }
@@ -57,6 +57,7 @@ namespace WeatherApp.Forms
             //read miscellaneous setting
             APIKEYTB.Text = Setting.APPID;
             IntervalNUD.Value = Setting.UpdateInterval;
+            NotificationsCB.IsChecked = Setting.TrayNotification;
         }
 
         private void OkBTN_Click(object sender, RoutedEventArgs e)
@@ -73,6 +74,9 @@ namespace WeatherApp.Forms
                 Setting.ProxyURL = ProxyUrlTB.Text;
                 Setting.ProxyPort = (int)ProxyNUD.Value;
             }
+
+            //tray notifications
+            Setting.TrayNotification = (NotificationsCB.IsChecked == true) ? true : false;
 
             //save miscellaneous setting
             Setting.APPID = APIKEYTB.Text;
