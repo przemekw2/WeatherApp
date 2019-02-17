@@ -91,15 +91,19 @@ namespace WeatherApp
         public MainWindow()
         {
             InitializeComponent();
-            //tray icon
-            trayIcon = new TrayIcon(this);
-
-            Closing += OnClosingWindow;
-
+              
             //read setting file
             this.Setting = (Setting)DeserializeObject(applicationDirPath + settingFileName);
-            //read data file
+            //read data file and create locations list
             this.LocationsList = (ObservableCollection<Location>)DeserializeObject(applicationDirPath + dataFileName);
+
+
+            #region tray icon definition
+            //tray icon
+            trayIcon = new TrayIcon(this, GetLocationsList());
+            Closing += OnClosingWindow;
+            #endregion
+
             //bind ListBox itemsource
             LocationsLB.ItemsSource = LocationsList;
 
@@ -112,24 +116,40 @@ namespace WeatherApp
 
             //Set Dispatcher Timers
             SetDispatcherTimers();
+            ShowNotifications();
         }
 
-        #region Tray Icon
-        //public void ShowTrayInformation(string Title, string Content)
-        //{
-        //    ni.BalloonTipTitle = Title;
-        //    ni.BalloonTipText = Content;
-        //    ni.BalloonTipIcon = ToolTipIcon.None;
-        //    ni.Visible = true;
-        //    ni.ShowBalloonTip(30000);
+        private void ShowNotifications()
+        {
+            foreach (Location locationItem in locationsList)
+            {
+                string locationName = locationItem.Name;
+                string locationDetails = String.Empty;
+                locationDetails += "Temperature: " + locationItem.CurrentWeatherDict["temp"] + "\n";
+                locationDetails += "Pressure: " + locationItem.CurrentWeatherDict["pressure"] + "\n";
+                locationDetails += "Humidity: " + locationItem.CurrentWeatherDict["humidity"] + "\n";
+                locationDetails += "Conditions: " + locationItem.CurrentWeatherDict["main"] + " : " + locationItem.CurrentWeatherDict["description"] + "\n";
+                locationDetails += "Wind: Speed: " + locationItem.CurrentWeatherDict["speed"] + " ,direction : " + locationItem.CurrentWeatherDict["deg"] + "\n";
+                trayIcon.ShowTrayInformation(locationName, locationDetails);
+                System.Threading.Thread.Sleep(10000);
+            }
+        }
 
-        //    ni.BalloonTipClicked += delegate (object sender, EventArgs args)
-        //    {
-        //        mainWindow.Show();
-        //        mainWindow.Activate();
-        //    };
-        //}
-        #endregion Tray Icon
+        private List<string> GetLocationsList()
+        {
+            List<string> locList = new List<string>();
+            try
+            {
+                foreach (Location locationItem in locationsList)
+                {
+                    locList.Add(locationItem.Name);
+                }
+            }
+            catch (NullReferenceException) { }
+            
+
+            return locList;
+        }
 
         private void OnClosingWindow(object sender, CancelEventArgs e)
         {
@@ -168,6 +188,8 @@ namespace WeatherApp
         {
             this.LocationsLB.ItemsSource = null;
             this.LocationsLB.ItemsSource = LocationsList;
+            //update context menu
+            trayIcon.UpdateContextMenu(GetLocationsList());
         }
 
         private void SearchMenuItem_Click(object sender, RoutedEventArgs e)

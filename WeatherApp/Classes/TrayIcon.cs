@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-
+using System.Collections.ObjectModel;
 
 namespace WeatherApp.Classes
 {
@@ -16,30 +16,34 @@ namespace WeatherApp.Classes
         private ContextMenu m_menu;
         private NotifyIcon ni;
 
-        public TrayIcon(MainWindow mainWindow)
+        public TrayIcon(MainWindow mainWindow, List<string> locationsList)
         {
             this.mainWindow = mainWindow;
             ni = new NotifyIcon();
             var iconURI = new Uri("/Icons/Sun.ico", UriKind.Relative);
             Stream iconStream = System.Windows.Application.GetResourceStream(iconURI).Stream;
             ni.Icon = new System.Drawing.Icon(iconStream);
-            ni.Text = "Tray test";
+            ni.Text = "Weather";
             ni.Visible = true;
-            ni.ContextMenu = CreateContextMenu();
+            ni.ContextMenu = CreateContextMenu(locationsList);
         }
 
-        public ContextMenu CreateContextMenu()
+        public ContextMenu CreateContextMenu(List<string> locationsList)
         {
             ContextMenu tempCMenu = new ContextMenu();
             tempCMenu.MenuItems.Add(0, new MenuItem("Open", new System.EventHandler(TrayOpen_Click)));
             MenuItem separatorMenuItem = new MenuItem("-");
             tempCMenu.MenuItems.Add(1, separatorMenuItem);
-            tempCMenu.MenuItems.Add(2, new MenuItem("Close", new System.EventHandler(TrayExit_Click)));
-            //MenuItem mnuSubMenuItem = new MenuItem("Submenu");
-            //mnuSubMenuItem.MenuItems.Add("cos 1");
-            //mnuSubMenuItem.MenuItems.Add("cos 2");
-            //m_menu.MenuItems.Add(2, mnuSubMenuItem);
+            tempCMenu.MenuItems.Add(2, CreateLocationsSMenu(locationsList));
+            tempCMenu.MenuItems.Add(3, new MenuItem("Close", new System.EventHandler(TrayExit_Click)));
+
             return tempCMenu;
+        }
+
+        public void UpdateContextMenu(List<string> locationsList)
+        {
+            ni.ContextMenu = null;
+            ni.ContextMenu = CreateContextMenu(locationsList);
         }
 
         public MenuItem CreateLocationsSMenu(List<string> locationsList)
@@ -48,7 +52,7 @@ namespace WeatherApp.Classes
 
             foreach(string location in locationsList)
             {
-                mnuSubMenuItem.MenuItems.Add(location);
+                mnuSubMenuItem.MenuItems.Add(location, new EventHandler(TrayLocation_Click));
             }
 
             return mnuSubMenuItem;
@@ -79,6 +83,19 @@ namespace WeatherApp.Classes
         {
             mainWindow.Show();
             mainWindow.Activate();
+            
         }
+
+        private void TrayLocation_Click(object sender, EventArgs e)
+        {
+            mainWindow.Show();
+            mainWindow.Activate();
+            MenuItem tempMenuItem = (MenuItem)sender;
+            mainWindow.LocationsLB.SelectedIndex = tempMenuItem.Index;
+            //maximize window
+            mainWindow.WindowState = System.Windows.WindowState.Normal;
+
+        }
+
     }
 }

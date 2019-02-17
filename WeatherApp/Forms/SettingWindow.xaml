@@ -6,26 +6,27 @@
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         xmlns:local="clr-namespace:WeatherApp.Forms"
         mc:Ignorable="d"
-        Title="Setting" Height="250" Width="480" ResizeMode="NoResize">
+        Title="Setting" Height="280" Width="480" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
+            <RowDefinition Height="115"/>
             <RowDefinition Height="90"/>
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
         <GroupBox Grid.Row="0" Header="Miscellaneous" HorizontalAlignment="Left" Margin="10,10,0,0"
-                  VerticalAlignment="Top" Height="80" Width="445">
+                  VerticalAlignment="Top" Height="120" Width="445">
             <DockPanel Grid.Row="0">
                 <Grid>
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="42*"/>
                         <ColumnDefinition Width="60*"/>
                     </Grid.ColumnDefinitions>
 
@@ -34,6 +35,8 @@
                     <Label Grid.Row="1"  Grid.Column="0" Content="Update Weather Data Interval"/>
                     <wpfTool:IntegerUpDown x:Name="IntervalNUD" Grid.Row="1" Grid.Column="1" Height="20" Width="80" Value="15" HorizontalAlignment="Left" Margin="10,0,0,0" FormatString="G" Minimum="15" Maximum="60" />
                     <Label Grid.Row="1"  Grid.Column="1" Content="min" Margin="90,0,0,0"/>
+                    <Label Grid.Row="2"  Grid.Column="0" Content="Enable System Tray Notification"/>
+                    <CheckBox Grid.Row="2"  Grid.Column="1" x:Name="NotificationsCB" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 </Grid>
 
             </DockPanel>
