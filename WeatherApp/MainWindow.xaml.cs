@@ -291,8 +291,12 @@ namespace WeatherApp
             //update forecast data
             foreach (Location location in locationsList)
             {
-                location.CurrentWeatherDict = GetCurrentWeatherData(location.Id, Setting.APPID);
-                location.FiveDayWeatherDict = GetFiveDayWeather(location.Id, Setting.APPID);
+                Task<Dictionary<string, string>> taskCurrentWeatherDict = GetCurrentWeatherDataAsync(location.Id, Setting.APPID);
+                location.CurrentWeatherDict = taskCurrentWeatherDict.Result;
+                //location.CurrentWeatherDict = GetCurrentWeatherData(location.Id, Setting.APPID);
+                //location.FiveDayWeatherDict = GetFiveDayWeather(location.Id, Setting.APPID);
+                Task<Dictionary<string, WConditions>> taskFiveDayWeatherDict = GetFiveDayWeatherAsync(location.Id, Setting.APPID);
+                location.FiveDayWeatherDict = taskFiveDayWeatherDict.Result;
             }
 
             //update form controls
@@ -595,96 +599,21 @@ namespace WeatherApp
         //    return fiveDayWeatherDict;
         //}
 
-        private void ProcessCurrentWeatherRequest(IAsyncResult result)
-        {
-            if (result.IsCompleted && request != null)
-            {
-                try
-                {
-                    WebResponse response = request.EndGetResponse(result);
-                    using (Stream input = response.GetResponseStream())
-                    {
-                        var encoding = ASCIIEncoding.ASCII;
-                        using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
-                        {
-                            string responseText = reader.ReadToEnd();
-                            WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
-
-                            string temp = String.Empty;
-                            string temp_min = String.Empty;
-                            string temp_max = String.Empty;
-                            string pressure = String.Empty;
-                            string humidity = String.Empty;
-                            string main = String.Empty;
-                            string description = String.Empty;
-                            string speed = String.Empty;
-                            string deg = String.Empty;
-
-                            //clear currentWeatherDict
-                            currentWeatherDict.Clear();
-
-                            #region Main
-                            try { temp = rootObject.main.temp.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("temp", temp);
-                            try { pressure = rootObject.main.pressure.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("pressure", pressure);
-                            try { humidity = rootObject.main.humidity.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("humidity", humidity);
-                            try { temp_min = rootObject.main.temp_min.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("temp_min", temp_min);
-                            try { temp_max = rootObject.main.temp_max.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("temp_max", temp_max);
-                            #endregion
-
-                            #region Wind
-                            try { speed = rootObject.wind.speed.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("speed", speed);
-                            try { deg = rootObject.wind.deg.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("deg", deg);
-                            #endregion
-
-                            #region Weather
-                            try { main = rootObject.weather[0].main.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("main", main);
-                            try { description = rootObject.weather[0].description.ToString(); }
-                            catch (NullReferenceException) { }
-                            currentWeatherDict.Add("description", description);
-                            #endregion
-
-                        }
-                    }
-                }
-                catch (WebException) { }
- 
-            }
-        }
-
-        //private void ProcessFiveDayWeatherRequest(IAsyncResult result)
+        //private void ProcessCurrentWeatherRequest(IAsyncResult result)
         //{
         //    if (result.IsCompleted && request != null)
         //    {
-        //        //clear fiveDayWeatherDict
-        //        fiveDayWeatherDict.Clear();
-        //        WebResponse response = request.EndGetResponse(result);
-        //        using (Stream input = response.GetResponseStream())
+        //        try
         //        {
-        //            var encoding = ASCIIEncoding.ASCII;
-        //            using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+        //            WebResponse response = request.EndGetResponse(result);
+        //            using (Stream input = response.GetResponseStream())
         //            {
-        //                string responseText = reader.ReadToEnd();
-        //                WeatherApp.JSON_Classes_Five_Day.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes_Five_Day.RootObject>(responseText);
-        //                for (int i = 0; i < rootObject.list.Count; i++)
+        //                var encoding = ASCIIEncoding.ASCII;
+        //                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
         //                {
-        //                    string dt = String.Empty;
-        //                    string dt_txt = String.Empty;
+        //                    string responseText = reader.ReadToEnd();
+        //                    WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
+
         //                    string temp = String.Empty;
         //                    string temp_min = String.Empty;
         //                    string temp_max = String.Empty;
@@ -692,42 +621,66 @@ namespace WeatherApp
         //                    string humidity = String.Empty;
         //                    string main = String.Empty;
         //                    string description = String.Empty;
-        //                    string all = String.Empty;
         //                    string speed = String.Empty;
         //                    string deg = String.Empty;
-        //                    string rain = String.Empty;
-        //                    string snow = String.Empty;
 
-        //                    try { dt = rootObject.list[i].dt.ToString(); } catch (NullReferenceException) { }
-        //                    try { dt_txt = rootObject.list[i].dt_txt.ToString(); } catch (NullReferenceException) { }
-        //                    try { temp = rootObject.list[i].main.temp.ToString(); } catch (NullReferenceException) { }
-        //                    try { temp_min = rootObject.list[i].main.temp_min.ToString(); } catch (NullReferenceException) { }
-        //                    try { temp_max = rootObject.list[i].main.temp_max.ToString(); } catch (NullReferenceException) { }
-        //                    try { pressure = rootObject.list[i].main.pressure.ToString(); } catch (NullReferenceException) { }
-        //                    try { humidity = rootObject.list[i].main.humidity.ToString(); } catch (NullReferenceException) { }
-        //                    try { main = rootObject.list[i].weather[0].main.ToString(); } catch (NullReferenceException) { }
-        //                    try { description = rootObject.list[i].weather[0].description.ToString(); } catch (NullReferenceException) { }
-        //                    try { all = rootObject.list[i].clouds.all.ToString(); } catch (NullReferenceException) { }
-        //                    try { speed = rootObject.list[i].wind.speed.ToString(); } catch (NullReferenceException) { }
-        //                    try { deg = rootObject.list[i].wind.deg.ToString(); } catch (NullReferenceException) { }
-        //                    try { rain = rootObject.list[i].rain.__invalid_name__3h.ToString(); } catch (NullReferenceException) { }
-        //                    try { snow = rootObject.list[i].snow.__invalid_name__3h.ToString(); } catch (NullReferenceException) { }
+        //                    //clear currentWeatherDict
+        //                    currentWeatherDict.Clear();
 
-        //                    fiveDayWeatherDict.Add(rootObject.list[i].dt_txt, new WConditions(
-        //                        dt, dt_txt, temp, temp_min, temp_max, pressure, humidity, main, description, all, speed, deg, rain, snow));
+        //                    #region Main
+        //                    try { temp = rootObject.main.temp.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("temp", temp);
+        //                    try { pressure = rootObject.main.pressure.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("pressure", pressure);
+        //                    try { humidity = rootObject.main.humidity.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("humidity", humidity);
+        //                    try { temp_min = rootObject.main.temp_min.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("temp_min", temp_min);
+        //                    try { temp_max = rootObject.main.temp_max.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("temp_max", temp_max);
+        //                    #endregion
+
+        //                    #region Wind
+        //                    try { speed = rootObject.wind.speed.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("speed", speed);
+        //                    try { deg = rootObject.wind.deg.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("deg", deg);
+        //                    #endregion
+
+        //                    #region Weather
+        //                    try { main = rootObject.weather[0].main.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("main", main);
+        //                    try { description = rootObject.weather[0].description.ToString(); }
+        //                    catch (NullReferenceException) { }
+        //                    currentWeatherDict.Add("description", description);
+        //                    #endregion
 
         //                }
         //            }
         //        }
+        //        catch (WebException) { }
+ 
         //    }
         //}
 
-
-
-        private Dictionary<string, string> GetCurrentWeatherData(string ID, string apikey)
+        public async Task<Dictionary<string, string>> GetCurrentWeatherDataAsync(string ID, string apikey)
         {
+            Dictionary<string, string> outputDict = await GetCurrentWeatherData(ID, apikey);  
+            return outputDict;
+        }
 
-            Dictionary<string, string> outputDict = new Dictionary<string, string>();
+        private Task<Dictionary<string, string>> GetCurrentWeatherData(string ID, string apikey)
+        {
+            var outputDict = new Dictionary<string, string>();
+            //Dictionary<string, string> outputDict = new Dictionary<string, string>();
             //string URL = @"http://api.openweathermap.org/data/2.5/weather?id=" + ID + @"&APPID=" + Setting.APPID + "&units=metric";
             string URL = $"http://api.openweathermap.org/data/2.5/weather?id={ID}&APPID={apikey}&units=metric";
             string json = String.Empty;
@@ -800,7 +753,7 @@ namespace WeatherApp
                             outputDict.Add("description", description);
                             #endregion
 
-                            return outputDict;
+                            return Task.FromResult<Dictionary<string, string>>(outputDict);
                         }
 
                     }
@@ -810,10 +763,15 @@ namespace WeatherApp
             {
                 return null;
             }
-
         }
 
-        private Dictionary<string, WConditions> GetFiveDayWeather(string ID, string apikey)
+        public async Task<Dictionary<string, WConditions>> GetFiveDayWeatherAsync(string ID, string apikey)
+        {
+            Dictionary<string, WConditions> outputDict = await GetFiveDayWeather(ID, apikey);
+            return outputDict;
+        }
+
+        private Task<Dictionary<string, WConditions>> GetFiveDayWeather(string ID, string apikey)
         {
             Dictionary<string, WConditions> outputDict = new Dictionary<string, WConditions>();
             string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={ID}&APPID={apikey}&units=metric";
@@ -885,7 +843,7 @@ namespace WeatherApp
                                     dt, dt_txt, temp, temp_min, temp_max, pressure, humidity, main, description, all, speed, deg, rain, snow));
                             }
 
-                            return outputDict;
+                            return Task.FromResult<Dictionary<string, WConditions>>(outputDict);
 
                         }
                     }
@@ -896,8 +854,98 @@ namespace WeatherApp
             {
                 return null;
             }
-
         }
+
+    //private Dictionary<string, string> GetCurrentWeatherData(string ID, string apikey)
+    //    {
+
+        //        Dictionary<string, string> outputDict = new Dictionary<string, string>();
+        //        //string URL = @"http://api.openweathermap.org/data/2.5/weather?id=" + ID + @"&APPID=" + Setting.APPID + "&units=metric";
+        //        string URL = $"http://api.openweathermap.org/data/2.5/weather?id={ID}&APPID={apikey}&units=metric";
+        //        string json = String.Empty;
+
+        //        HttpWebRequest request = WebRequest.Create(URL) as HttpWebRequest;
+        //        request.UserAgent = "Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)";
+
+        //        if (!Setting.UseDefaultProxy)
+        //        {
+        //            WebProxy proxy = new WebProxy(Setting.ProxyURL, Setting.ProxyPort);
+        //            request.Proxy = proxy;
+        //        }
+        //        else
+        //        {
+        //            IWebProxy proxy = WebRequest.GetSystemWebProxy();
+        //            request.Proxy = proxy;
+        //        }
+
+        //        if (request.Proxy != null)
+        //            request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
+        //        try
+        //        {
+        //            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+        //            {
+        //                using (Stream responseStream = response.GetResponseStream())
+        //                {
+        //                    var encoding = ASCIIEncoding.ASCII;
+        //                    using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+        //                    {
+        //                        string responseText = reader.ReadToEnd();
+        //                        WeatherApp.JSON_Classes.RootObject rootObject = JsonConvert.DeserializeObject<WeatherApp.JSON_Classes.RootObject>(responseText);
+
+        //                        string temp = String.Empty;
+        //                        string temp_min = String.Empty;
+        //                        string temp_max = String.Empty;
+        //                        string pressure = String.Empty;
+        //                        string humidity = String.Empty;
+        //                        string main = String.Empty;
+        //                        string description = String.Empty;
+        //                        string speed = String.Empty;
+        //                        string deg = String.Empty;
+
+        //                        outputDict.Add("found", "true");
+
+        //                        #region Main
+        //                        try { temp = rootObject.main.temp.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("temp", temp);
+        //                        try { pressure = rootObject.main.pressure.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("pressure", pressure);
+        //                        try { humidity = rootObject.main.humidity.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("humidity", humidity);
+        //                        try { temp_min = rootObject.main.temp_min.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("temp_min", temp_min);
+        //                        try { temp_max = rootObject.main.temp_max.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("temp_max", temp_max);
+        //                        #endregion
+
+        //                        #region Wind
+        //                        try { speed = rootObject.wind.speed.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("speed", speed);
+        //                        try { deg = rootObject.wind.deg.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("deg", deg);
+        //                        #endregion
+
+        //                        #region Weather
+        //                        try { main = rootObject.weather[0].main.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("main", main);
+        //                        try { description = rootObject.weather[0].description.ToString(); } catch (NullReferenceException) { }
+        //                        outputDict.Add("description", description);
+        //                        #endregion
+
+        //                        return outputDict;
+        //                    }
+
+        //                }
+        //            }
+        //        }
+        //        catch (System.Net.WebException ex)
+        //        {
+        //            return null;
+        //        }
+
+        //    }
+
+
 
 
         private void UpdateMenuItem_Click(object sender, RoutedEventArgs e)
