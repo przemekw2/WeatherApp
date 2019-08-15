@@ -10,7 +10,6 @@ namespace WeatherApp.Classes
     [Serializable]
     public class WConditions : IWConditions
     {
-        public string ID { get; set; }
         public string TimeStamp { get; set; }
         public string TimeStampTxt { get; set; }
         public string Temp { get; set; }
@@ -26,12 +25,11 @@ namespace WeatherApp.Classes
         public string Rain { get; set; }
         public string Snow { get; set; }
 
-        public WConditions(string id, string timestamp, string timestamptxt, string temp,
+        public WConditions(string timestamp, string timestamptxt, string temp,
             string tempmin, string tempmax, string pressure, string humidity, string conditions,
             string conditionsdesc, string cloud, string windspeed, string winddeg, string rain,
             string snow)
         {
-            this.ID = id;
             this.TimeStamp = timestamp;
             this.TimeStampTxt = timestamptxt;
             this.Temp = temp;

@@ -8,7 +8,6 @@ namespace WeatherApp.Interfaces
 {
     interface IWConditions
     {
-        string ID { get; set; }
         string TimeStamp { get; set; }
         string TimeStampTxt { get; set; }
         string Temp { get; set; }
